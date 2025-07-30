@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/oms_product_db
+    url: jdbc:postgresql://localhost:5432/oms_tenant_db
     username: oms_pg_user
     password: 123456
   jpa:
@@ -19,4 +19,4 @@ spring:
     password: ${spring.datasource.password}
 
 server:
-  port: 8082
+  port: 8083
