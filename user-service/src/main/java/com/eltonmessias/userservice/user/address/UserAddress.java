@@ -1,5 +1,6 @@
-package com.eltonmessias.userservice.user;
+package com.eltonmessias.userservice.user.address;
 
+import com.eltonmessias.userservice.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

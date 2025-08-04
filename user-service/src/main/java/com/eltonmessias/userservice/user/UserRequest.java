@@ -1,5 +1,6 @@
 package com.eltonmessias.userservice.user;
 
+import com.eltonmessias.userservice.user.address.UserAddressRequest;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
@@ -11,17 +12,11 @@ public record UserRequest(
         String email,
         String firstName,
         String lastName,
+        String passwordHash,
         ROLE role,
         STATUS status,
         Boolean emailVerified,
-        LocalDateTime lastLoginAt,
-        LocalDateTime createdAt,
-        LocalDateTime updatedAt,
 //        Address
-        String country,
-        String state,
-        String city,
-        String postalCode,
-        String street
+        UserAddressRequest address
 ) {
 }

@@ -1,6 +1,7 @@
 package com.eltonmessias.userservice.user;
 
 import com.eltonmessias.userservice.tenant.Tenant;
+import com.eltonmessias.userservice.user.address.UserAddress;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -21,6 +22,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -73,4 +75,12 @@ public class User {
 
 
 
+    @PrePersist
+    protected void onCreate() {
+        if (createdAt == null) {
+            createdAt = LocalDateTime.now();
+        }
+    }
 }
+
+

@@ -6,8 +6,6 @@ import java.util.UUID;
 public record TenantRequest(
         UUID id,
         String name,
-        String SubscriptionPlan,
-        List<UUID> userIds
-
+        String SubscriptionPlan
 ) {
 }

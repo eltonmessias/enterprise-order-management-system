@@ -15,6 +15,7 @@ import java.util.UUID;
 public class TenantController {
 
     private final TenantService service;
+    private final TenantService tenantService;
 
     @GetMapping
     public ResponseEntity<List<TenantResponse>> findAll() {
@@ -29,5 +30,11 @@ public class TenantController {
     @GetMapping("/{tenant-id}")
     public ResponseEntity<TenantResponse> findById(@PathVariable("tenant-id") UUID tenantId) {
         return ResponseEntity.ok(service.findTenantById(tenantId));
+    }
+
+    @DeleteMapping("/{tenant-id}")
+    public ResponseEntity<Void> deleteTenant(@PathVariable("tenant-id") UUID tenantId) {
+        service.deleteTenant(tenantId);
+        return ResponseEntity.noContent().build();
     }
 }

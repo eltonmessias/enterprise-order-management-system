@@ -1,6 +1,5 @@
 package com.eltonmessias.userservice.tenant;
 
-import com.eltonmessias.tenantservice.Tenant.Tenant;
 import com.eltonmessias.userservice.exception.TenantNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +28,12 @@ public class TenantService {
     }
 
     public TenantResponse findTenantById(UUID tenantId) {
-        var tenant = tenantRepository.findById(tenantId).orElseThrow(new TenantNotFoundException("Tenant not found"));
+        var tenant = tenantRepository.findById(tenantId).orElseThrow();
         return mapper.toTenantResponse(tenant);
+    }
+
+    public void deleteTenant(UUID tenantId) {
+        var tenant = tenantRepository.findById(tenantId).orElseThrow(() -> new TenantNotFoundException("Tenant not found"));
+        tenantRepository.delete(tenant);
     }
 }

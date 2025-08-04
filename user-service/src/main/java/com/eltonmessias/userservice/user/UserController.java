@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,7 +27,7 @@ public class UserController {
     }
 
     @GetMapping("/{user-id}")
-    public ResponseEntity<UserResponse> getUserById(@PathVariable("user-id") String userId) {
+    public ResponseEntity<UserResponse> getUserById(@PathVariable("user-id") UUID userId) {
         return new ResponseEntity<>(userService.getUSerById(userId), HttpStatus.OK);
     }
 }
