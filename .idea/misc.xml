@@ -19,7 +19,6 @@
     <option name="ignoredFiles">
       <set>
         <option value="$PROJECT_DIR$/gateway/pom.xml" />
-        <option value="$PROJECT_DIR$/tenant-service/pom.xml" />
       </set>
     </option>
   </component>

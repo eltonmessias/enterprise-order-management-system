@@ -1,4 +1,4 @@
-package com.eltonmessias.userservice.tenant;
+package com.eltonmessias.tenantservice.tenant;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

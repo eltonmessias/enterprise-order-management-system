@@ -1,6 +1,6 @@
-package com.eltonmessias.userservice.tenant;
+package com.eltonmessias.tenantservice.tenant;
 
-import com.eltonmessias.userservice.exception.TenantNotFoundException;
+import com.eltonmessias.tenantservice.exception.TenantNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 

@@ -1,4 +1,4 @@
-package com.eltonmessias.userservice.tenant;
+package com.eltonmessias.tenantservice.tenant;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;

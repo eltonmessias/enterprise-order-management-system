@@ -1,34 +1,33 @@
-package com.eltonmessias.userservice.tenant;
+package com.eltonmessias.tenantservice.tenant;
 
-import com.eltonmessias.userservice.user.User;
-import com.eltonmessias.userservice.user.UserRepository;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class TenantMapper {
 
-    private final UserRepository userRepository;
 
     public Tenant toTenant(@Valid TenantRequest request) {
         return Tenant.builder()
-                .id(request.id())
                 .name(request.name())
-                .subscriptionPlan(request.SubscriptionPlan())
+                .subscriptionPlan(SubscriptionPlan.valueOf(request.subscriptionPlan().toUpperCase()))
                 .build();
     }
 
     public TenantResponse toTenantResponse(Tenant tenant) {
         return new TenantResponse(
                 tenant.getId(),
+                tenant.getTenantCode(),
                 tenant.getName(),
+                tenant.getEmail(),
+                tenant.getAddress(),
+                tenant.getSubscriptionPlan().toString(),
                 tenant.getCreatedAt(),
-                tenant.getSubscriptionPlan()
+                tenant.getUpdatedAt()
+
         );
     }
 }
