@@ -1,6 +1,5 @@
 package com.eltonmessias.userservice.user;
 
-import com.eltonmessias.userservice.tenant.Tenant;
 import com.eltonmessias.userservice.user.address.UserAddress;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -28,10 +27,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-//    @Column(name = "tenant_id", nullable = false, updatable = false, unique = true)
-    @ManyToOne
-    @JoinColumn(name = "tenant_id")
-    private Tenant tenant;
+    private UUID tenantId;
 
     @Column(nullable = false, length = 50, unique = true)
     @Size(min = 5, max = 50)

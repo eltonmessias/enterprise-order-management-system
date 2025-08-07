@@ -1,7 +1,7 @@
 package com.eltonmessias.userservice.user;
 
-import com.eltonmessias.userservice.tenant.Tenant;
-import com.eltonmessias.userservice.tenant.TenantRepository;
+
+import com.eltonmessias.userservice.tenant.TenantResponse;
 import com.eltonmessias.userservice.user.address.UserAddress;
 import com.eltonmessias.userservice.user.address.UserAddressResponse;
 import jakarta.validation.Valid;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserMapper {
 
-    private final TenantRepository tenantRepository;
 
 
     public UserResponse toUserResponse(User user) {
@@ -24,7 +23,7 @@ public class UserMapper {
         );
         return new UserResponse(
                 user.getId(),
-                user.getTenant().getId(),
+                user.getTenantId(),
                 user.getUsername(),
                 user.getFirstName(),
                 user.getLastName(),
@@ -39,7 +38,7 @@ public class UserMapper {
         );
     }
 
-    public User toUser(@Valid UserRequest request) {
+    public User toUser(@Valid UserRequest request, TenantResponse tenant) {
 
         UserAddress address = UserAddress.builder()
                 .street(request.address().street())
@@ -52,7 +51,7 @@ public class UserMapper {
 
         User user = User.builder()
                 .username(request.username())
-                .tenant(Tenant.builder().id(request.tenantId()).build())
+                .tenantId(tenant.id())
                 .firstName(request.firstName())
                 .lastName(request.lastName())
                 .passwordHash(request.passwordHash())

@@ -1,8 +1,8 @@
 package com.eltonmessias.userservice.user;
 
 import com.eltonmessias.userservice.exception.UserNotFoundException;
-import com.eltonmessias.userservice.tenant.TenantRepository;
-import com.eltonmessias.userservice.tenant.TenantService;
+import com.eltonmessias.userservice.tenant.TenantClient;
+import com.eltonmessias.userservice.tenant.TenantResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,8 +16,7 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final TenantRepository tenantRepository;
-    private final TenantService tenantService;
+    private final TenantClient tenantClient;
 
     public List<UserResponse> findAllUsers() {
         List<User> users = userRepository.findAll();
@@ -25,7 +24,8 @@ public class UserService {
     }
 
     public UserResponse createUser(@Valid UserRequest userRequest) {
-        var user  = userMapper.toUser(userRequest);
+        TenantResponse tenant = tenantClient.getTenantById(userRequest.tenantId());
+        var user  = userMapper.toUser(userRequest, tenant);
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
