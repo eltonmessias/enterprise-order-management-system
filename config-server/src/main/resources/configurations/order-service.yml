@@ -16,5 +16,7 @@ spring:
 
   application:
     config:
-      user-url: http://localhost/api/v1/users
-      product-url: http://localhost/api/v1/products
+      user-url: http://localhost/api/v1/user
+      product-url: http://localhost/api/v1/product
+      tenant-url: http://localhost/api/v1/tenant
+      inventory-url: http://localhost/api/v1/inventory
