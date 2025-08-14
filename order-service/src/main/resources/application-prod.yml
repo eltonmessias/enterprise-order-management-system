@@ -1,0 +1,21 @@
+app:
+  kafka:
+    topics:
+      order-created: "prod.order.events.created.v1"
+      order-updated: "prod.order.events.updated.v1"
+      order-cancelled: "prod.order.events.cancelled.v1"
+      order-saga-compensation: "prod.order.saga.compensation.v1"
+
+      payment-processed: "prod.payment.events.processed.v1"
+      inventory-reserved: "prod.inventory.events.reserved.v1"
+      inventory-released: "prod.inventory.events.released.v1"
+
+      order-created-dlt: "prod.order.events.created.v1.DLT"
+      payment-processed-dlt: "prod.payment.events.processed.v1.DLT"
+
+    default:
+      partitions: 12
+      replicas: 3
+      retention-days: 30
+      cleanup-policy: "delete"
+      compression-type: "snappy"

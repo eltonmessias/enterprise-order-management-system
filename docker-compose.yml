@@ -67,6 +67,12 @@ services:
     networks:
       - oms-net
 
+  mail-dev:
+    container_name: oms-mail-dev
+    image: maildev/maildev
+    ports:
+      - "1080:1080"
+      - "1025:1025"
 
 
 
