@@ -1,6 +1,7 @@
 package com.eltonmessias.orderservice.kafka.events;
 
 import com.eltonmessias.orderservice.Product.PurchaseResponse;
+import com.eltonmessias.orderservice.orderItem.OrderItem;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -11,7 +12,7 @@ public record OrderCreatedEvent(
         String orderNumber,
         UUID customerId,
         BigDecimal totalAmount,
-        List<PurchaseResponse> items,
+        List<OrderItem> items,
         LocalDateTime createdAt
 ) {
 }
