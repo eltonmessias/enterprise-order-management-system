@@ -42,25 +42,18 @@ public class OrderService {
         Order order = orderMapper.toOrder(request, tenant, user);
         orderRepository.save(order);
 
-        for (OrderItem orderItemRequest: request.orderItems()) {
+        for (OrderItemRequest orderItemRequest: request.orderItems()) {
 
             orderItemService.createOrderItem(
                     new OrderItemRequest(
-                            orderItemRequest.getProductId(),
+                            orderItemRequest.productId(),
                             order.getId(),
-                            orderItemRequest.getQuantity()
+                            orderItemRequest.quantity()
                     )
             );
         }
 
         calculateTotals(order);
-
-//        var paymentRequest = new PaymentRequest(
-//                order.getTotalAmount(),
-//                order.getId(),
-//                order.getOrder_number(),
-//                user
-//        );
 
 
         orderEventProducer.publishOrderCreated(
@@ -68,7 +61,7 @@ public class OrderService {
                         order.getOrder_number(),
                         request.userId(),
                         order.getTotalAmount(),
-                        request.orderItems(),
+                        order.getOrderItems(),
                         order.getCreatedAt()
                 )
         );

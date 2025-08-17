@@ -1,6 +1,7 @@
 package com.eltonmessias.orderservice.order;
 
 import com.eltonmessias.orderservice.orderItem.OrderItem;
+import com.eltonmessias.orderservice.orderItem.OrderItemRequest;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -13,7 +14,7 @@ public record OrderRequest(
         Status status,
         OrderType orderType,
 
-        List<OrderItem> orderItems,
+        List<OrderItemRequest> orderItems,
 
         //    Shipping Address
         String shippingFirstName,
