@@ -1,6 +1,6 @@
 package com.eltonmessias.notificationservice.notification;
 
-public enum NotificationType {
+public enum NotificationChannel {
     EMAIL,
     SMS,
     PUSH,

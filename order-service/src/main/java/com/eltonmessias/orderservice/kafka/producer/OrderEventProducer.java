@@ -36,7 +36,7 @@ public class OrderEventProducer {
     @Async
     public void publishOrderCreated(OrderCreatedEvent event) {
         log.info("Publishing order created event for order: {}", event.orderNumber());
-        kafkaTemplate.send("order-created", event.orderNumber(), event)
+        kafkaTemplate.send(orderCancelledTopic, event.orderNumber(), event)
                 .whenComplete((result, ex) -> {
                     if(ex == null) {
                         log.info("Order created event sent successfully for order: {} with offset: {}",

@@ -56,13 +56,17 @@ public class OrderService {
         calculateTotals(order);
 
 
+        String userFullName = user.firstName() + " " + user.lastName();
         orderEventProducer.publishOrderCreated(
                 new OrderCreatedEvent(
+                        order.getId(),
                         order.getOrder_number(),
                         request.userId(),
+                        userFullName,
+                        user.email(),
                         order.getTotalAmount(),
-                        order.getOrderItems(),
-                        order.getCreatedAt()
+                        order.getCreatedAt(),
+                        order.getOrderItems().stream().map(orderItemMapper::toOrderItemResponse).toList()
                 )
         );
 

@@ -11,6 +11,7 @@ public record OrderCreatedEvent(
         UUID orderId,
         String orderNumber,
         UUID userId,
+        UUID tenantId,
         String userName,
         String userEmail,
         BigDecimal totalAmount,

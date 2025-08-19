@@ -18,9 +18,6 @@ public record OrderItemResponse(
         Integer quantity,
         BigDecimal unitPrice,
         BigDecimal totalPrice,
-        UUID warehouseId,
-        Status status,
-        LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        UUID warehouseId
 ) {
 }
