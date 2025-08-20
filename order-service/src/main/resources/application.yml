@@ -14,6 +14,7 @@ app:
 
       # Tópicos que o Order Service CONSOME
       payment-processed: "payment.events.processed.v1"
+      payment-failed: "payment.events.failed.v1"
       inventory-reserved: "inventory.events.reserved.v1"
       inventory-released: "inventory.events.released.v1"
 

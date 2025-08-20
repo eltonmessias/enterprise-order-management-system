@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -25,7 +26,8 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private UUID tenantId;
-    private String order_number;
+    @Column(unique = true, nullable = false)
+    private String orderNumber;
     private UUID userId;
     @Enumerated(EnumType.STRING)
     private Status status = Status.PENDING;
@@ -80,6 +82,13 @@ public class Order {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
+
+    @PostPersist
+    protected void onPostPersist() {
+        String year = String.valueOf(Year.now().getValue());
+        this.orderNumber = String.format("ORD-%s-%s", year, this.id.toString().substring(0, 8).toUpperCase());
+    }
+
 
     @PreUpdate
     protected void onUpdate() {

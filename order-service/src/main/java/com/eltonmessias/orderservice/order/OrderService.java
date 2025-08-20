@@ -3,11 +3,11 @@ package com.eltonmessias.orderservice.order;
 import com.eltonmessias.orderservice.Product.ProductClient;
 import com.eltonmessias.orderservice.Tenant.TenantClient;
 import com.eltonmessias.orderservice.Tenant.TenantResponse;
+import com.eltonmessias.orderservice.exception.OrderNotFoundException;
 import com.eltonmessias.orderservice.kafka.events.OrderCreatedEvent;
 import com.eltonmessias.orderservice.kafka.producer.OrderEventProducer;
 import com.eltonmessias.orderservice.orderItem.*;
 import com.eltonmessias.orderservice.payment.PaymentClient;
-import com.eltonmessias.orderservice.payment.PaymentRequest;
 import com.eltonmessias.orderservice.user.UserClient;
 import com.eltonmessias.orderservice.user.UserResponse;
 import jakarta.validation.Valid;
@@ -17,6 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -38,7 +41,6 @@ public class OrderService {
     public OrderResponse createOrder(@Valid OrderRequest request) {
         TenantResponse tenant = tenantClient.findById(request.tenantId());
         UserResponse user = userClient.findById(request.userId());
-//        List<ProductResponse> products = productClient.findAllById(request  )
         Order order = orderMapper.toOrder(request, tenant, user);
         orderRepository.save(order);
 
@@ -60,7 +62,7 @@ public class OrderService {
         orderEventProducer.publishOrderCreated(
                 new OrderCreatedEvent(
                         order.getId(),
-                        order.getOrder_number(),
+                        order.getOrderNumber(),
                         request.userId(),
                         userFullName,
                         user.email(),
@@ -87,5 +89,46 @@ public class OrderService {
         BigDecimal shipping = order.getShippingAmount() != null ? order.getShippingAmount() : BigDecimal.ZERO;
 
         order.setTaxAmount(subtotal.add(tax).add(shipping));
+        orderRepository.save(order);
     }
+
+
+    public List<OrderResponse> findAllOrders() {
+        List<Order> orders = orderRepository.findAll();
+        return orders.stream().map(orderMapper::toOrderResponse).collect(Collectors.toList());
+    }
+
+    public OrderResponse findOrderById(UUID orderId) {
+        var order = orderRepository.findById(orderId).orElseThrow(() -> new OrderNotFoundException("Order not found"));
+        return orderMapper.toOrderResponse(order);
+    }
+
+    public void deleteOrderById(UUID orderId) {
+        var order = orderRepository.findById(orderId).orElseThrow(() -> new OrderNotFoundException("Order not found"));
+        orderRepository.delete(order);
+    }
+
+    public OrderResponse updateOrder(UUID orderId, @Valid OrderRequest request) {
+        var order = orderRepository.findById(orderId).orElseThrow(() -> new OrderNotFoundException("Order not found"));
+        TenantResponse tenant = tenantClient.findById(request.tenantId());
+        UserResponse user = userClient.findById(request.userId());
+        order = orderMapper.toOrder(request, tenant, user);
+        orderRepository.save(order);
+
+        for (OrderItemRequest orderItemRequest: request.orderItems()) {
+
+            orderItemService.createOrderItem(
+                    new OrderItemRequest(
+                            orderItemRequest.productId(),
+                            order.getId(),
+                            orderItemRequest.quantity()
+                    )
+            );
+        }
+
+        calculateTotals(order);
+        return orderMapper.toOrderResponse(order);
+    }
+
+
 }

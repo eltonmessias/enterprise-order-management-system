@@ -27,14 +27,9 @@ public class OrderMapper {
         if(orderRequest.orderItems() != null) {
             List<OrderItem> orderItems = orderRequest.orderItems().stream()
                     .map(itemReq -> OrderItem.builder()
-                            .productId(itemReq.getProductId())
-                            .sku(itemReq.getSku())
-                            .productName(itemReq.getProductName())
-                            .quantity(itemReq.getQuantity())
-                            .unitPrice(itemReq.getUnitPrice())
-                            .totalPrice(itemsTotalPrice)
-                            .warehouseId(itemReq.getWarehouseId())
-                            .status(itemReq.getStatus())
+                            .productId(itemReq.productId())
+                            .order(order)
+                            .quantity(itemReq.quantity())
                             .build())
                     .toList();
             order.setOrderItems(orderItems);
@@ -48,7 +43,7 @@ public class OrderMapper {
         return new OrderResponse(
                 order.getId(),
                 order.getTenantId(),
-                order.getOrder_number(),
+                order.getOrderNumber(),
                 order.getUserId(),
                 order.getStatus(),
                 order.getOrderType(),
