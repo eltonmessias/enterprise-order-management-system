@@ -1,5 +1,5 @@
 package com.eltonmessias.paymentservice.payment;
 
 public enum Status {
-    PENDING, PROCESSING, COMPLETED, FAILED, REFUNDED, CANCELLED
+    PENDING, PROCESSING, CONFIRMED, FAILED, REFUNDED, CANCELLED
 }

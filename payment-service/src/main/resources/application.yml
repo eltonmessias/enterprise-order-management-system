@@ -4,27 +4,27 @@ spring:
   application:
     name: payment-service
 
-  app:
-    kafka:
-      topics:
-        order-created: "order.events.created.v1"
-        order-updated: "order.events.updated.v1"
-        order-cancelled: "order.events.cancelled.v1"
-        order-saga-compensation: "order.saga.compensation.v1"
+app:
+  kafka:
+    topics:
+      order-created: "order.events.created.v1"
+      order-updated: "order.events.updated.v1"
+      order-cancelled: "order.events.cancelled.v1"
+      order-saga-compensation: "order.saga.compensation.v1"
 
-        # Tópicos que o Order Service CONSOME
-        payment-processed: "payment.events.processed.v1"
-        payment-failed: "payment.events.failed.v1"
-        inventory-reserved: "inventory.events.reserved.v1"
-        inventory-released: "inventory.events.released.v1"
+      # Tópicos que o Order Service CONSOME
+      payment-confirmed: "payment.events.confirmed.v1"
+      payment-failed: "payment.events.failed.v1"
+      inventory-reserved: "inventory.events.reserved.v1"
+      inventory-released: "inventory.events.released.v1"
 
-        # Dead Letter Topics
-        order-created-dlt: "order.events.created.v1.DLT"
-        payment-processed-dlt: "payment.events.processed.v1.DLT"
+      # Dead Letter Topics
+      order-created-dlt: "order.events.created.v1.DLT"
+      payment-processed-dlt: "payment.events.processed.v1.DLT"
 
-      default:
-        partitions: 6
-        replicas: 3
-        retention-days: 7
-        clean-policy: "delete"
-        compression-type: "snappy"
+    default:
+      partitions: 6
+      replicas: 3
+      retention-days: 7
+      clean-policy: "delete"
+      compression-type: "snappy"

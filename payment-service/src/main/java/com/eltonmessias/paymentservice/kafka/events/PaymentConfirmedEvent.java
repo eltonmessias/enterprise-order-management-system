@@ -1,15 +1,14 @@
-package com.eltonmessias.orderservice.kafka.events;
+package com.eltonmessias.paymentservice.kafka.events;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public record PaymentFailedEvent(
+public record PaymentConfirmedEvent(
         UUID tenantId,
         UUID orderId,
         UUID paymentId,
         BigDecimal amount,
         LocalDateTime confirmedAt
 ) {
-
 }
