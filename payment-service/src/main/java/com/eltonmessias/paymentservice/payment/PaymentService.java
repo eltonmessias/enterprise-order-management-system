@@ -29,7 +29,8 @@ public class PaymentService {
     }
 
     public void confirmPayment(UUID tenantId, UUID paymentId, String externalPaymentId) {
-        Payment payment = paymentRepository.findById(paymentId).orElseThrow(() -> new PaymentNotFoundException("Payment not found"));
+        Payment payment = paymentRepository.findById(paymentId).orElseThrow(() -> new PaymentNotFoundException(
+                "Payment not found"));
         payment.setExternalPaymentId(externalPaymentId);
         payment.setStatus(Status.CONFIRMED);
         paymentRepository.save(payment);
