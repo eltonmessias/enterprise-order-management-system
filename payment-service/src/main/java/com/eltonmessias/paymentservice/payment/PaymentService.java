@@ -22,9 +22,9 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final PaymentEventProducer paymentEventProducer;
 
-    public PaymentResponse createPayment(String tenantId, @Valid PaymentRequest paymentRequest) {
-        Payment payment = paymentMapper.toPayment(paymentRequest);
-        payment.setTenantId(UUID.fromString(tenantId));
+    public PaymentResponse createPayment(UUID tenantId, @Valid PaymentRequest paymentRequest) {
+        Payment payment = paymentMapper.toPayment(tenantId, paymentRequest);
+        payment.setTenantId(tenantId);
         return paymentMapper.toPaymentResponse(payment);
     }
 

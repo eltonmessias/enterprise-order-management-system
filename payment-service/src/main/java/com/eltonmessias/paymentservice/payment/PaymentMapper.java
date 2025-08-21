@@ -2,12 +2,14 @@ package com.eltonmessias.paymentservice.payment;
 
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class PaymentMapper {
 
-    public Payment toPayment(PaymentRequest request) {
+    public Payment toPayment(UUID tenantId, PaymentRequest request) {
         return Payment.builder()
-                .tenantId(request.tenantId())
+                .tenantId(tenantId)
                 .orderId(request.orderId())
                 .paymentMethod(request.paymentMethod())
                 .paymentProvider(request.paymentProvider())
