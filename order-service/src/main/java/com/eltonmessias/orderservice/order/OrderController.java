@@ -2,8 +2,7 @@ package com.eltonmessias.orderservice.order;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.LifecycleState;
-import org.springframework.http.HttpOutputMessage;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,31 +19,37 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<OrderResponse> createOrder(@RequestBody @Valid OrderRequest request) {
-        return new ResponseEntity<>(orderService.createOrder(request), HttpStatus.CREATED);
+    public ResponseEntity<OrderResponse> createOrder(
+            @RequestHeader("X-Tenant-Id") UUID tenantID,
+            @RequestBody @Valid OrderRequest request) {
+        return new ResponseEntity<>(orderService.createOrder(request, tenantID), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<OrderResponse>> getAllOrders() {
-        if (orderService.findAllOrders().isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(orderService.findAllOrders(), HttpStatus.OK);
+    public ResponseEntity<List<OrderResponse>> getAllOrders(@RequestHeader("X-Tenant-Id") UUID tenantID) {
+        return new ResponseEntity<>(orderService.findAllOrders(tenantID), HttpStatus.OK);
     }
 
     @GetMapping("/{order-id}")
-    public ResponseEntity<OrderResponse> getOrderById(@PathVariable("order-id")UUID orderId) {
-        return new ResponseEntity<>(orderService.findOrderById(orderId), HttpStatus.OK);
+    public ResponseEntity<OrderResponse> getOrderById(
+            @RequestHeader("X-Tenant-Id") UUID tenantID,
+            @PathVariable("order-id")UUID orderId) {
+        return new ResponseEntity<>(orderService.findOrderById(orderId, tenantID), HttpStatus.OK);
     }
 
     @DeleteMapping("/{order-id}")
-    public ResponseEntity<?> deleteOrderById(@PathVariable("order-id")UUID orderId) {
-        orderService.deleteOrderById(orderId);
+    public ResponseEntity<?> deleteOrderById(
+            @RequestHeader("X-Tenant-Id") UUID tenantID,
+            @PathVariable("order-id")UUID orderId) {
+        orderService.deleteOrderById(orderId, tenantID);
         return new ResponseEntity<>( HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{order-id}")
-    public ResponseEntity<OrderResponse> updateOrder(@PathVariable("order-id") UUID orderId, @RequestBody @Valid OrderRequest request) {
-        return new ResponseEntity<>(orderService.updateOrder(orderId, request), HttpStatus.ACCEPTED);
+    public ResponseEntity<OrderResponse> updateOrder(
+            @RequestHeader("X-Tenant-Id") UUID tenantID,
+            @PathVariable("order-id") UUID orderId,
+            @RequestBody @Valid OrderRequest request) {
+        return new ResponseEntity<>(orderService.updateOrder(orderId, request, tenantID), HttpStatus.ACCEPTED);
     }
 }

@@ -8,11 +8,11 @@ import com.eltonmessias.inventoryservice.warehouse.Warehouse;
 import com.eltonmessias.inventoryservice.warehouse.WarehouseRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,12 +29,10 @@ public class InventoryService {
         return inventoryMapper.toInventoryResponse(inventoryRepository.save(inventory));
     }
 
-    public List<InventoryResponse> getAllInventories() {
-        List<Inventory> inventories = inventoryRepository.findAll();
-        if (inventories.isEmpty()) {
-            throw new RuntimeException("There are no inventories");
-        }
-        return inventories.stream().map(inventoryMapper::toInventoryResponse).collect(Collectors.toList());
+    public PagedResponse<InventoryResponse> getAllInventories(Pageable pageable) {
+        Page<Inventory> inventory = inventoryRepository.findAll(pageable);
+        Page<InventoryResponse> responsePage = inventory.map(inventoryMapper::toInventoryResponse);
+        return new PagedResponse<>(responsePage);
     }
 
     public InventoryResponse getInventoryById(UUID inventoryId) {

@@ -1,5 +1,6 @@
 server:
   port: 8070
+
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
@@ -8,7 +9,7 @@ spring:
     password: 123456
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
@@ -30,12 +31,36 @@ spring:
       auto-offset-reset: earliest
       enable-auto-commit: false
       properties:
-        spring.json.trusted.packages: "com.oms.order.kafka.events"
-        spring.json.type.mapping: "orderCreated:com.oms.order.kafka.events.OrderCreatedEvent,paymentProcessed:com.oms.order.kafka.events.PaymentProcessedEvent"
+        spring.json.trusted.packages: "com.eltonmessias.orderservice.kafka.events"
+        spring.json.type.mapping: "orderCreated:com.eltonmessias.orderservice.kafka.events.OrderCreatedEvent,paymentProcessed:com.eltonmessias.orderservice.kafka.events.PaymentConfirmedEvent"
 
-  application:
-    config:
-      user-url: http://localhost/api/v1/user
-      product-url: http://localhost/api/v1/product
-      tenant-url: http://localhost/api/v1/tenant
-      inventory-url: http://localhost/api/v1/inventory
+application:
+  config:
+    user-url: http://localhost:8222/api/v1/users
+    product-url: http://localhost:8222/api/v1/products
+    tenant-url: http://localhost:8222/api/v1/tenants
+    inventory-url: http://localhost:8222/api/v1/inventories
+
+eureka:
+  instance:
+    hostname: localhost
+    prefer-ip-address: true
+    ip-address: 127.0.0.1
+    instance-id: ${spring.application.name}:${server.port}
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 30
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    fetch-registry: true
+    register-with-eureka: true
+    registry-fetch-interval-seconds: 10
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  endpoint:
+    health:
+      show-details: always

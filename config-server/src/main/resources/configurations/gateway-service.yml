@@ -1,23 +1,110 @@
 server:
   port: 8222
-  spring:
-    cloud:
-      gateway:
-        discovery:
-          locator:
-            enabled: true
-        routes:
-          - id: user-service
-            uri: lb:http://USER-SERVICE
-            predicates:
-              - Path:/api/v1/users/**
 
-          - id: product-service
-            uri: lb:http://PRODUCT-SERVICE
-            predicates:
-              - Path:/api/v1/products/**
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true  # Importante para normalizar nomes
+      routes:
+        - id: TENANT-SERVICE
+          uri: lb://tenant-service  # minúsculo é melhor prática
+          predicates:
+            - Path=/api/v1/tenants/**
+#          filters:
+#            - name: Retry
+#              args:
+#                retries: 3
+#                statuses: BAD_GATEWAY,UNAVAILABLE
+#                methods: GET,POST,PUT,DELETE
 
-          - id: inventory-service
-            uri: lb:http://INVENTORY-SERVICE
-            predicates:
-                - Path:/api/v1/inventory/**
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/api/v1/users/**
+#          filters:
+#            - name: Retry
+#              args:
+#                retries: 3
+#                statuses: BAD_GATEWAY,UNAVAILABLE
+#                methods: GET,POST,PUT,DELETE
+
+        - id: product-service
+          uri: lb://PRODUCT-SERVICE
+          predicates:
+            - Path=/api/v1/products/**
+#          filters:
+#            - name: Retry
+#              args:
+#                retries: 3
+#                statuses: BAD_GATEWAY,UNAVAILABLE
+#                methods: GET,POST,PUT,DELETE
+
+        - id: inventory-service
+          uri: lb://INVENTORY-SERVICE
+          predicates:
+            - Path=/api/v1/inventories/**
+#          filters:
+#            - name: Retry
+#              args:
+#                retries: 3
+#                statuses: BAD_GATEWAY,UNAVAILABLE
+#                methods: GET,POST,PUT,DELETE
+
+        - id: order-service
+          uri: lb://ORDER-SERVICE
+          predicates:
+            - Path=/api/v1/orders/**
+#          filters:
+#            - name: Retry
+#              args:
+#                retries: 3
+#                statuses: BAD_GATEWAY,UNAVAILABLE
+#                methods: GET,POST,PUT,DELETE
+
+# Configuração do Eureka para o Gateway
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    fetch-registry: true
+    register-with-eureka: true
+    registry-fetch-interval-seconds: 10
+  instance:
+    hostname: localhost
+    prefer-ip-address: true
+    ip-address: 127.0.0.1
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 30
+
+# Configurações de load balancer
+#spring:
+#  cloud:
+#    loadbalancer:
+#      ribbon:
+#        enabled: false
+#      retry:
+#        enabled: true
+
+# Health check e monitoring
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway,metrics
+  endpoint:
+    health:
+      show-details: always
+    gateway:
+      enabled: true
+
+# Logging para debug (remover em produção)
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    org.springframework.cloud.netflix.eureka: DEBUG
+    org.springframework.web.reactive: DEBUG

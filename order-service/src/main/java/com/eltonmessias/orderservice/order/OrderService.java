@@ -27,7 +27,6 @@ import java.util.stream.Collectors;
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private final OrderItemRepository orderItemRepository;
     private final TenantClient tenantClient;
     private final OrderItemMapper orderItemMapper;
     private final OrderMapper orderMapper;
@@ -38,8 +37,8 @@ public class OrderService {
     private final PaymentClient paymentClient;
 
     @Transactional
-    public OrderResponse createOrder(@Valid OrderRequest request) {
-        TenantResponse tenant = tenantClient.findById(request.tenantId());
+    public OrderResponse createOrder(@Valid OrderRequest request, UUID tenantID) {
+        TenantResponse tenant = tenantClient.findById(tenantID);
         UserResponse user = userClient.findById(request.userId());
         Order order = orderMapper.toOrder(request, tenant, user);
         orderRepository.save(order);
@@ -93,23 +92,26 @@ public class OrderService {
     }
 
 
-    public List<OrderResponse> findAllOrders() {
-        List<Order> orders = orderRepository.findAll();
+    public List<OrderResponse> findAllOrders(UUID tenantID) {
+        List<Order> orders = orderRepository.findAllByTenantId(tenantID);
         return orders.stream().map(orderMapper::toOrderResponse).collect(Collectors.toList());
     }
 
-    public OrderResponse findOrderById(UUID orderId) {
-        var order = orderRepository.findById(orderId).orElseThrow(() -> new OrderNotFoundException("Order not found"));
+    public OrderResponse findOrderById(UUID orderId, UUID tenantID) {
+        var order = orderRepository.findByIdAndTenantId(orderId, tenantID).orElseThrow(() -> new OrderNotFoundException(
+                "Order not found"));
         return orderMapper.toOrderResponse(order);
     }
 
-    public void deleteOrderById(UUID orderId) {
-        var order = orderRepository.findById(orderId).orElseThrow(() -> new OrderNotFoundException("Order not found"));
+    public void deleteOrderById(UUID orderId, UUID tenantID) {
+        var order = orderRepository.findByIdAndTenantId(orderId, tenantID).orElseThrow(() -> new OrderNotFoundException(
+                "Order not found"));
         orderRepository.delete(order);
     }
 
-    public OrderResponse updateOrder(UUID orderId, @Valid OrderRequest request) {
-        var order = orderRepository.findById(orderId).orElseThrow(() -> new OrderNotFoundException("Order not found"));
+    public OrderResponse updateOrder(UUID orderId, @Valid OrderRequest request, UUID tenantID) {
+        var order = orderRepository.findByIdAndTenantId(orderId, tenantID).orElseThrow(() -> new OrderNotFoundException(
+                "Order not found"));
         TenantResponse tenant = tenantClient.findById(request.tenantId());
         UserResponse user = userClient.findById(request.userId());
         order = orderMapper.toOrder(request, tenant, user);

@@ -8,8 +8,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 @FeignClient(
-        name = "tenant-service",
-        url = "${application.config.tenant-url}"
+        name = "tenant-service"
+//        url = "${application.config.tenant-url}"
 )
 public interface TenantClient {
 

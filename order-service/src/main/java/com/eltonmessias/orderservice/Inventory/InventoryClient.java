@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.UUID;
 
 @FeignClient(
-        name = "inventory-service",
-        url = "${application.config.inventory-url}"
+        name = "inventory-service"
+//        url = "${application.config.inventory-url}"
 )
 public interface InventoryClient {
 

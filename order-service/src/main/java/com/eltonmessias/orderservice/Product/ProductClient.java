@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.UUID;
 
 @FeignClient(
-        name = "product-service",
-        url = "${application.config.product-url}"
+        name = "product-service"
+//        url = "${application.config.product-url}"
 )
 public interface ProductClient {
     @GetMapping("/api/v1/product/{productId}")

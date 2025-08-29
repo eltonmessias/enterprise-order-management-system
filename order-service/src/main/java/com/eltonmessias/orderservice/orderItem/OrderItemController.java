@@ -1,8 +1,6 @@
 package com.eltonmessias.orderservice.orderItem;
 
-import com.eltonmessias.orderservice.order.OrderRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +16,7 @@ public class OrderItemController {
 
 
     @PostMapping
-    public ResponseEntity<UUID> createOrderItem(@RequestBody OrderRequest request) {
+    public UUID createOrderItem(@RequestBody OrderItemRequest request) {
         return orderItemService.createOrderItem(request);
     }
 }

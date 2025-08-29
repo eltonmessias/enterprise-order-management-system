@@ -10,12 +10,12 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/oms/tenant")
+@RequestMapping("/api/v1/tenants")
 @RequiredArgsConstructor
 public class TenantController {
 
     private final TenantService service;
-    private final TenantService tenantService;
+
 
     @GetMapping
     public ResponseEntity<List<TenantResponse>> findAll() {

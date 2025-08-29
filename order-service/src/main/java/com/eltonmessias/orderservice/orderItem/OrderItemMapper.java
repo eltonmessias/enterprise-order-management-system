@@ -36,10 +36,10 @@ public class OrderItemMapper {
                 orderItem.getQuantity(),
                 orderItem.getUnitPrice(),
                 orderItem.getTotalPrice(),
-                orderItem.getWarehouseId(),
-                orderItem.getStatus(),
-                orderItem.getCreatedAt(),
-                orderItem.getUpdatedAt()
+                orderItem.getWarehouseId()
+//                orderItem.getStatus(),
+//                orderItem.getCreatedAt(),
+//                orderItem.getUpdatedAt()
         );
     }
 }
