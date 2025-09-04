@@ -45,4 +45,15 @@ public class OrderItem {
         updatedAt = LocalDateTime.now();
     }
 
+    public void updateQuantity(int newQuantity) {
+        if (newQuantity <= 0) {
+            throw new IllegalArgumentException("Quantity must be greater than 0");
+        }
+        this.quantity = newQuantity;
+        recalculateTotals();
+    }
+    public void recalculateTotals() {
+        this.totalPrice = unitPrice.multiply(BigDecimal.valueOf(quantity));
+    }
+
 }

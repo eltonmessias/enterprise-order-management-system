@@ -2,6 +2,7 @@ package com.eltonmessias.orderservice.kafka.producer;
 
 import com.eltonmessias.orderservice.kafka.events.OrderCancelledEvent;
 import com.eltonmessias.orderservice.kafka.events.OrderCreatedEvent;
+import com.eltonmessias.orderservice.kafka.events.OrderStatusUpdatedEvent;
 import com.eltonmessias.orderservice.kafka.events.OrderUpdateEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,8 @@ public class OrderEventProducer {
     private String orderCancelledTopic;
 
 
+
+
     @Async
     public void publishOrderCreated(OrderCreatedEvent event) {
         log.info("Publishing order created event for order: {}", event.orderNumber());
@@ -42,6 +45,20 @@ public class OrderEventProducer {
                                 event.orderNumber(), result.getRecordMetadata().offset());
                     } else {
                         log.error("Failed to send order created event: {}", event.orderNumber(), ex);
+                    }
+                });
+    }
+
+    @Async
+    public void publishOrderStatusUpdated(OrderStatusUpdatedEvent event) {
+        log.info("Publishing order status updated event for order: {}", event.orderNumber());
+        kafkaTemplate.send(orderUpdatedTopic, event.orderNumber(), event)
+                .whenComplete((result, ex) -> {
+                    if(ex == null) {
+                        log.info("Order status updated event sent successfully for order: {} with offset: {}",
+                                event.orderNumber(), result.getRecordMetadata().offset());
+                    } else {
+                        log.error("Failed to send order status updated event: {}", event.orderNumber(), ex);
                     }
                 });
     }

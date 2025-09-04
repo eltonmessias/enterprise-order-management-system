@@ -13,4 +13,5 @@ public interface OrderRepository extends JpaRepository<Order, UUID>, JpaSpecific
     List<Order> findAllByTenantId(UUID tenantId);
     Optional<Order> findByIdAndTenantId(UUID id, UUID tenantId);
 
+    List<Order> findAllByIdAndTenantId(UUID orderId, UUID tenantId);
 }

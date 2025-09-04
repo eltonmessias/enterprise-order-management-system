@@ -1,6 +1,7 @@
 package com.eltonmessias.orderservice.order;
 
 import com.eltonmessias.orderservice.orderItem.OrderItem;
+import com.eltonmessias.orderservice.user.UserResponse;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -94,6 +95,42 @@ public class Order {
     @PreUpdate
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
+    }
+
+    public void addItem(OrderItem item) {
+        ensureEditable();
+        orderItems.add(item);
+        item.setOrder(this);
+        recalculateTotal();
+    }
+
+    public void removeItem(OrderItem item) {
+        ensureEditable();
+        orderItems.remove(item);
+        recalculateTotal();
+    }
+
+    public void recalculateTotal() {
+        this.subtotal = orderItems.stream().map(OrderItem::getTotalPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        this.totalAmount = subtotal.add(
+                (taxAmount != null ? taxAmount : BigDecimal.ZERO)
+                        .add(shippingAmount != null ? shippingAmount : BigDecimal.ZERO)
+        );
+    }
+
+    public void ensureEditable() {
+        if (status != Status.PENDING) {
+            throw new IllegalArgumentException("Cannot update status of an order that is " + status);
+        }
+    }
+
+    public void updateFromRequest(OrderRequest request, UUID tenantId, UserResponse user) {
+        ensureEditable();
+        this.userId = request.userId();
+        this.tenantId = tenantId;
+        this.updatedAt = LocalDateTime.now();
+        this.recalculateTotal();
     }
 
 }

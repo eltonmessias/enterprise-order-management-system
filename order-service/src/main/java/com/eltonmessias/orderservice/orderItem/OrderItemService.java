@@ -21,7 +21,7 @@ public class OrderItemService {
     private final InventoryClient inventoryClient;
 
     @Transactional
-    public UUID createOrderItem(OrderItemRequest request) {
+    public OrderItem createOrderItem(OrderItemRequest request) {
         ProductResponse product = productClient.findById(request.productId());
         InventoryResponse inventory = inventoryClient.findById(product.productId());
         if(inventory.quantityAvailable() < request.quantity()) {
@@ -32,7 +32,7 @@ public class OrderItemService {
         inventoryClient.updateQuantity(product.productId(), -request.quantity());
 
 
-        return orderItemRepository.save(orderItem).getId();
+        return orderItemRepository.save(orderItem);
 
     }
 }
