@@ -16,6 +16,6 @@ public record TenantRequest(
         String email,
         @NotNull(message = "The address is mandatory")
         String address,
-        String subscriptionPlan
+        SubscriptionPlan subscriptionPlan
 ) {
 }

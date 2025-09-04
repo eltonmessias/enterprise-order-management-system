@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.UUID;
 
 public record OrderRequest(
-        UUID tenantId,
         UUID userId,
         Status status,
         OrderType orderType,

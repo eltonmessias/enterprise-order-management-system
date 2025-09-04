@@ -5,15 +5,17 @@ import com.eltonmessias.inventoryservice.warehouse.Warehouse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class InventoryMapper {
 
-    public Inventory toInventory(InventoryRequest request, Warehouse warehouse, ProductResponse product) {
+    public Inventory toInventory(InventoryRequest request, Warehouse warehouse, ProductResponse product, UUID tenantId) {
 
 
         return Inventory.builder()
-                .tenantId(warehouse.getTenantId())
+                .tenantId(tenantId)
                 .productId(product.productId())
                 .warehouse(warehouse)
                 .quantityAvailable(request.quantityAvailable())

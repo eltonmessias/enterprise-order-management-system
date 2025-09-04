@@ -9,10 +9,10 @@ spring:
       discovery:
         locator:
           enabled: true
-          lower-case-service-id: true  # Importante para normalizar nomes
+          lower-case-service-id: true
       routes:
-        - id: TENANT-SERVICE
-          uri: lb://tenant-service  # minúsculo é melhor prática
+        - id: tenant-service
+          uri: lb://TENANT-SERVICE
           predicates:
             - Path=/api/v1/tenants/**
 #          filters:

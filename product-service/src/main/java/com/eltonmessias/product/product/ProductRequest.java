@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record ProductRequest(
-        @NotBlank(message = "The tenantId is mandatory") UUID tenantId,
         @NotBlank(message = "The sku is mandatory") String sku,
         @NotBlank(message = "The name is mandatory") String name,
         String description,

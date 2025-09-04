@@ -1,12 +1,13 @@
 package com.eltonmessias.orderservice.order;
 
-import com.eltonmessias.orderservice.Tenant.TenantResponse;
+import com.eltonmessias.orderservice.tenant.TenantResponse;
 import com.eltonmessias.orderservice.orderItem.OrderItem;
 import com.eltonmessias.orderservice.orderItem.OrderItemMapper;
 import com.eltonmessias.orderservice.user.UserResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,7 +20,7 @@ public class OrderMapper {
         this.orderItemMapper = orderItemMapper;
     }
 
-    public Order toOrder(OrderRequest orderRequest, TenantResponse itemsTotalPrice, UserResponse user) {
+    public Order toOrder(OrderRequest orderRequest, UUID tenantId, UserResponse user) {
         Order order = new Order();
 
 
@@ -35,7 +36,7 @@ public class OrderMapper {
             order.setOrderItems(orderItems);
         }
 
-
+        order.setTenantId(tenantId);
         return order;
     }
 

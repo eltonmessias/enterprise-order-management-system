@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -40,11 +41,11 @@ public class ProductMapper {
                 );
     }
 
-    public Product toProduct(ProductRequest request) {
+    public Product toProduct(ProductRequest request, UUID tenantId) {
         var category = categoryRepository.existsById(request.categoryId());
         if (!category) { throw new RuntimeException("Category not found"); }
         return Product.builder()
-                .tenantId(request.tenantId())
+                .tenantId(tenantId)
                 .sku(request.sku())
                 .name(request.name())
                 .description(request.description())
@@ -64,8 +65,8 @@ public class ProductMapper {
     }
 
 
-    public void updateProduct(Product product, @Valid ProductRequest request) {
-        product.setTenantId(request.tenantId());
+    public void updateProduct(Product product, @Valid ProductRequest request, UUID tenantId) {
+        product.setTenantId(tenantId);
         product.setSku(request.sku());
         product.setName(request.name());
         product.setDescription(request.description());

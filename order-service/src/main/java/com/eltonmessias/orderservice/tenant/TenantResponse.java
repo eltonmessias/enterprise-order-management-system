@@ -1,4 +1,4 @@
-package com.eltonmessias.orderservice.Tenant;
+package com.eltonmessias.orderservice.tenant;
 
 import java.util.UUID;
 

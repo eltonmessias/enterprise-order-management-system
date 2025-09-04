@@ -13,7 +13,9 @@ public class TenantMapper {
     public Tenant toTenant(@Valid TenantRequest request) {
         return Tenant.builder()
                 .name(request.name())
-                .subscriptionPlan(SubscriptionPlan.valueOf(request.subscriptionPlan().toUpperCase()))
+                .email(request.email())
+                .address(request.address())
+                .subscriptionPlan(request.subscriptionPlan())
                 .build();
     }
 
@@ -24,7 +26,7 @@ public class TenantMapper {
                 tenant.getName(),
                 tenant.getEmail(),
                 tenant.getAddress(),
-                tenant.getSubscriptionPlan().toString(),
+                tenant.getSubscriptionPlan(),
                 tenant.getCreatedAt(),
                 tenant.getUpdatedAt()
 

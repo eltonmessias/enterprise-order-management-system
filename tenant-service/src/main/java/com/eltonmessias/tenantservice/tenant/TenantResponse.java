@@ -13,7 +13,7 @@ public record TenantResponse(
         String name,
         String email,
         String address,
-        String subscriptionPlan,
+        SubscriptionPlan subscriptionPlan,
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         LocalDateTime createdAt,
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

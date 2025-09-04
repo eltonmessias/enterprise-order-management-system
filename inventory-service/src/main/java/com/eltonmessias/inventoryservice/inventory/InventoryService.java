@@ -1,5 +1,6 @@
 package com.eltonmessias.inventoryservice.inventory;
 
+import com.eltonmessias.inventoryservice.Tenant.TenantContext;
 import com.eltonmessias.inventoryservice.exception.InventoryNotFoundException;
 import com.eltonmessias.inventoryservice.exception.WarehouseNotFoundException;
 import com.eltonmessias.inventoryservice.product.ProductClient;
@@ -23,20 +24,23 @@ public class InventoryService {
     private final ProductClient productClient;
 
     public InventoryResponse createInventory(@Valid InventoryRequest request) {
-        Warehouse warehouse = warehouseRepository.findById(request.warehouseId()).orElseThrow(() -> new WarehouseNotFoundException("Warehouse not found"));
+        UUID tenantId = TenantContext.getTenantId();
+        Warehouse warehouse = warehouseRepository.findByIdAndTenantId(request.warehouseId(), tenantId).orElseThrow(() -> new WarehouseNotFoundException("Warehouse not found"));
         ProductResponse product = productClient.getProductById(request.productId());
-        var inventory = inventoryMapper.toInventory(request, warehouse, product);
+        var inventory = inventoryMapper.toInventory(request, warehouse, product, tenantId);
         return inventoryMapper.toInventoryResponse(inventoryRepository.save(inventory));
     }
 
     public PagedResponse<InventoryResponse> getAllInventories(Pageable pageable) {
-        Page<Inventory> inventory = inventoryRepository.findAll(pageable);
+        UUID tenantId = TenantContext.getTenantId();
+        Page<Inventory> inventory = inventoryRepository.findAllByTenantId(tenantId);
         Page<InventoryResponse> responsePage = inventory.map(inventoryMapper::toInventoryResponse);
         return new PagedResponse<>(responsePage);
     }
 
     public InventoryResponse getInventoryById(UUID inventoryId) {
-        var inventory = inventoryRepository.findById(inventoryId).orElseThrow(() -> new InventoryNotFoundException("Inventory not found"));
+        UUID tenantId = TenantContext.getTenantId();
+        var inventory = inventoryRepository.findByIdAndTenantId(inventoryId, tenantId).orElseThrow(() -> new InventoryNotFoundException("Inventory not found"));
         return inventoryMapper.toInventoryResponse(inventory);
     }
 }

@@ -1,6 +1,7 @@
 package com.eltonmessias.product.product;
 
 import com.eltonmessias.product.exception.ProductNotFoundException;
+import com.eltonmessias.product.tenant.TenantContext;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,19 +22,22 @@ public class ProductService {
     }
 
     public UUID createProduct(@Valid ProductRequest request) {
-        Product product = productMapper.toProduct(request);
+        UUID tenantId = TenantContext.getTenantId();
+        Product product = productMapper.toProduct(request, tenantId);
         return productRepository.save(product).getId();
     }
 
 
     public ProductResponse getProductById(UUID productId) {
-        var product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException("Product not found"));
+        UUID tenantId = TenantContext.getTenantId();
+        var product = productRepository.findByIdAndTenantId(productId, tenantId).orElseThrow(() -> new ProductNotFoundException("Product not found"));
         return productMapper.toProductResponse(product);
     }
 
     public ProductResponse updateProduct(UUID productId, @Valid ProductRequest request) {
-        var product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException("Product not found"));
-        productMapper.updateProduct(product, request);
+        UUID tenantId = TenantContext.getTenantId();
+        var product = productRepository.findByIdAndTenantId(productId, tenantId).orElseThrow(() -> new ProductNotFoundException("Product not found"));
+        productMapper.updateProduct(product, request, tenantId);
         productRepository.save(product);
         return productMapper.toProductResponse(product);
     }

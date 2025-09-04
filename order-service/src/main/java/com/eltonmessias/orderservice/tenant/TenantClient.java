@@ -1,4 +1,4 @@
-package com.eltonmessias.orderservice.Tenant;
+package com.eltonmessias.orderservice.tenant;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
